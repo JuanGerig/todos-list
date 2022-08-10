@@ -1,26 +1,41 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
-
-//create your first component
-const Home = () => {
+const ToDoList = () => {
+	const [task, setTask] = useState({label: "",done:false})
+	const [list, setList] = useState([]) 
+	const handleTask = (event) => {
+		event.preventDefault(),
+		setTask({...task, label: event.target.value})
+	}
+	const saveTask = () => {
+		setList([...list, task])
+	}
+	const removeTask = (id) => {
+		let newList = list.filter((tarea, index)=>{
+			return (
+				id != index
+			)
+		})
+		setList(newList)
+	}
 	return (
-		<div className="text-center">
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
-		</div>
-	);
-};
-
-export default Home;
+		<form onSubmit={handleTask}>
+			<div className="body">
+			<h1 className="header">TODOS LIST</h1>
+			<div className="input-save">
+			<input placeholder="agrega una nueva tarea" value={task.label}name="task"onChange={handleTask}/>
+			<button className= "save-button" onClick = {saveTask}>Save</button>
+			</div>
+			{list.map((tarea, index) => {
+				return(
+					<div className="list-added">
+						<p key={index}>{tarea.label}</p>
+							<button className="r-button" key={index} onClick={()=>removeTask(index)}>X</button>
+					</div>
+				)
+			})}
+			</div>
+		</form>
+	)
+}
+export default ToDoList;
